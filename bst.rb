@@ -79,12 +79,18 @@ class Tree
         find(value, node.rchild) if !node.rchild.nil?
     end
 
-    def level_order(node = @root, q = [], &block)
+    def level_order(node = @root, q = [])
+        return nil if node.nil?
         q << node
-        level_order(node.lchild, q, &block) if !node.lchild.nil?
-        level_order(node.rchild, q, &block) if !node.rchild.nil?
-        current = q.shift()
-        yield(current)
+        while q.length >= 1
+            current = q.shift()
+            yield(current)
+            q << current.lchild if !current.lchild.nil?
+            q << current.rchild if !current.rchild.nil?
+        end
+        
+
+
     end
 
 
