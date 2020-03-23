@@ -88,11 +88,51 @@ class Tree
             q << current.lchild if !current.lchild.nil?
             q << current.rchild if !current.rchild.nil?
         end
-        
-
-
     end
 
+    def inorder(node = @root)
+        return nil if node.nil?
+        inorder(node.lchild)
+        puts node.data 
+        inorder(node.rchild)
+    end
+
+    def preorder(node = @root)
+        return nil if node.nil?
+        puts node.data
+        preorder(node.lchild) 
+        preorder(node.rchild)
+    end
+
+    def postorder(node = @root)
+        return nil if node.nil?
+        postorder(node.lchild) 
+        postorder(node.rchild)
+        puts node.data
+    end
+
+    def depth(node = @root)
+        return -1 if node.nil?
+        left_depth = depth(node.lchild)
+        right_depth = depth(node.rchild)
+        left_depth > right_depth ? max = left_depth : max = right_depth
+        max+1
+    end
+
+    def balanced?(node = @root)
+        return nil if node.nil?
+        left_depth = depth(node.lchild)
+        right_depth = depth(node.rchild)
+
+        answer = left_depth - right_depth > 1 || left_depth - right_depth < -1 ? false : true
+        answer
+    end
+
+    def rebalance!(node = @root)
+        array = []
+        self.level_order { |node| array << node.data }
+        @root = self.build_tree(array)
+    end
 
 end
 
@@ -100,14 +140,46 @@ end
 
 
 
-tree = Tree.new([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324])
-puts tree.root.data
-pp tree
-tree.delete(8)
-puts tree.root.data
+tree = Tree.new(Array.new(15) { rand(1..100) })
+
 pp tree
 
 # node = tree.find(6345)
 # pp node
 
 tree.level_order { |node| puts node.data }
+puts "Level Order ^"
+puts ""
+puts "In Order ^ #{tree.inorder}"
+puts ""
+puts "Pre Order ^ #{tree.preorder}"
+puts ""
+puts "Post Order ^ #{tree.postorder}"
+
+puts "Depth: #{tree.depth}"
+puts "Balanced? #{tree.balanced?}"
+puts ""
+
+tree.insert(6666)
+tree.insert(7000)
+tree.insert(8500)
+tree.insert(9000)
+tree.insert(11111)
+puts "Added values"
+puts "Depth: #{tree.depth}"
+puts "Balanced? #{tree.balanced?}"
+puts ""
+
+tree.rebalance!
+puts "Rebalanced"
+puts "Level Order ^"
+puts ""
+puts "In Order ^ #{tree.inorder}"
+puts ""
+puts "Pre Order ^ #{tree.preorder}"
+puts ""
+puts "Post Order ^ #{tree.postorder}"
+
+puts ""
+puts "Depth: #{tree.depth}"
+puts "Balanced? #{tree.balanced?}"
